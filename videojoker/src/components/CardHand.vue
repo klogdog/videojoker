@@ -1,29 +1,25 @@
-<!-- Hand.vue -->
+<!-- CardHand.vue -->
 <template>
   <div class="hand-container">
     <div v-for="(card, index) in hand" :key="card.value + card.suit" class="card-container">
-      <card :card="card" :held="heldCards[index]" @click.native="holdOrReplace(index)"></card>
+      <poker-card :card="card" :held="heldCards[index]" @click="holdOrReplace(index)"></poker-card>
     </div>
   </div>
 </template>
 
 <script>
-import Card from './Card.vue';
+import PokerCard from './PokerCard.vue';
 
 export default {
-  name: 'Hand',
+  name: 'CardHand',
   components: {
-    Card
+    PokerCard
   },
   props: {
     hand: {
       type: Array,
       required: true
     },
-    replace: {
-      type: Function,
-      required: true
-    }
   },
   data() {
     return {
@@ -32,11 +28,9 @@ export default {
   },
   methods: {
     holdOrReplace(index) {
-      if (this.heldCards[index]) {
-        this.heldCards[index] = false;
-        this.replace(index);
-      } else {
-        this.heldCards[index] = true;
+      this.heldCards[index] = !this.heldCards[index];
+      if (!this.heldCards[index]) {
+        this.$emit('replace', index);
       }
     }
   }

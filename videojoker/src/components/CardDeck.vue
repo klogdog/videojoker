@@ -1,18 +1,11 @@
+<!-- CardDeck.vue -->
 <template>
-  <div>
-    <button @click="shuffleDeck">Shuffle</button>
-    <hand :draw="draw"></hand>
-  </div>
+  <div style="display: none;"></div>
 </template>
 
 <script>
-import Hand from './Hand.vue';
-
 export default {
-  name: 'Deck',
-  components: {
-    Hand
-  },
+  name: 'CardDeck',
   data() {
     return {
       deck: [],
