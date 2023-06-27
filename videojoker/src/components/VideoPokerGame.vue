@@ -1,8 +1,9 @@
 <template>
   <div>
     <button @click="startGame">Start Game</button>
-    <card-hand v-if="gameStarted" :hand="hand" @drawNewCards="drawNewCards"></card-hand>
-    <card-deck ref="cardDeck" @deck-ready="handleDeckReady"></card-deck>
+    <button v-if="gameState === 'started'" @click="replaceCards">Draw</button>
+    <card-hand v-if="gameState === 'started'" :hand="hand" @toggleHold="toggleHold"></card-hand>
+    <card-deck ref="cardDeck"></card-deck>
   </div>
 </template>
 
@@ -18,30 +19,33 @@ export default {
   },
   data() {
     return {
-      gameStarted: false,
-      deck: [],
-      hand: []
+      gameState: 'idle',  // 'idle', 'started'
+      hand: [],
+      heldCards: Array(5).fill(false)
     }
   },
   methods: {
     startGame() {
-      this.gameStarted = true;
+      this.gameState = 'started';
+      this.drawHand();
     },
     drawHand() {
+      this.hand = this.$refs.cardDeck.draw(5);
+    },
+    replaceCards() {
       for (let i = 0; i < 5; i++) {
-        this.hand.push(this.deck.pop());
-      }
-    },
-    drawNewCards(heldCards) {
-      heldCards.forEach((held, index) => {
-        if (!held) {
-          this.hand.splice(index, 1, this.deck.pop());
+        if (!this.heldCards[i]) {
+          this.hand[i] = this.$refs.cardDeck.draw(1)[0];
         }
-      });
+      }
+      this.heldCards = Array(5).fill(false);
+      this.scoreHand();
     },
-    handleDeckReady(deck) {
-      this.deck = deck;
-      this.drawHand();
+    toggleHold(index) {
+      this.heldCards[index] = !this.heldCards[index];
+    },
+    scoreHand() {
+      // Scoring logic here
     },
   }
 }
