@@ -1,4 +1,3 @@
-<!-- CardHand.vue -->
 <template>
   <div class="hand-container">
     <div v-for="(card, index) in hand" :key="card.value + card.suit" class="card-container">
@@ -29,9 +28,17 @@ export default {
   methods: {
     holdOrReplace(index) {
       this.heldCards[index] = !this.heldCards[index];
-      if (!this.heldCards[index]) {
-        this.$emit('replace', index);
+    },
+    drawNewCards() {
+      const newHand = [];
+      for (let i = 0; i < this.hand.length; i++) {
+        if (!this.heldCards[i]) {
+          newHand.push(this.$parent.deck.pop());
+        } else {
+          newHand.push(this.hand[i]);
+        }
       }
+      this.$emit('replace', newHand);
     }
   }
 }
