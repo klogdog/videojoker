@@ -1,10 +1,9 @@
-<!-- Game.vue -->
 <template>
   <div>
     <button @click="startGame">Start Game</button>
     <button v-if="gameStarted" @click="drawHand">Draw</button>
     <card-hand v-if="gameStarted" :hand="hand" @replace="replace"></card-hand>
-    <card-deck v-show="false" @deck-ready="handleDeckReady"></card-deck>
+    <card-deck ref="cardDeck" @deck-ready="handleDeckReady"></card-deck>
   </div>
 </template>
 
@@ -42,6 +41,10 @@ export default {
       this.deck = deck;
       this.drawHand();
     },
+  },
+  mounted() {
+    // Commented this line out.
+    // this.$refs.cardDeck.prepareDeck();
   }
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
-  <div class="poker-card" :class="{ held: held }" @click="handleCardClick">
+  <div 
+    class="poker-card" 
+    :class="['suit-' + card.suit, { held: held }]" 
+    @click="handleCardClick">
     <div class="card-content">
       <span class="card-value">{{ card.value }}</span>
       <img v-if="isFaceCard" :src="'./images/' + card.value + '-face-card.png'" alt="Face card image" class="face-card-image">
@@ -48,11 +51,20 @@ export default {
   color: black;
   position: relative;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .held {
   transform: translateY(-10px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.suit-hearts, .suit-diamonds {
+  color: red;
+}
+
+.suit-clubs, .suit-spades {
+  color: black;
 }
 
 .card-content {

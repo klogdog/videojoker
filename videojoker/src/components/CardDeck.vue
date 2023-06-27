@@ -1,5 +1,7 @@
 <template>
-  <div style="display: none;"></div>
+  <div>
+    <button @click="prepareDeck">Prepare Deck</button>
+  </div>
 </template>
 
 <script>
@@ -36,8 +38,8 @@ export default {
       this.$emit('deck-ready', this.deck);
     }
   },
-  created() {
-    this.prepareDeck();
+  mounted() {
+    // Prepare deck is moved to the button click.
   }
 }
 </script>

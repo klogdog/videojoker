@@ -28,18 +28,10 @@ export default {
   methods: {
     holdOrReplace(index) {
       this.heldCards[index] = !this.heldCards[index];
-    },
-    drawNewCards() {
-      const newHand = [];
-      for (let i = 0; i < this.hand.length; i++) {
-        if (!this.heldCards[i]) {
-          newHand.push(this.$parent.deck.pop());
-        } else {
-          newHand.push(this.hand[i]);
-        }
+      if (!this.heldCards[index]) {
+        this.$emit('replace', index);
       }
-      this.$emit('replace', newHand);
-    }
+    },
   }
 }
 </script>
