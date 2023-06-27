@@ -1,4 +1,3 @@
-<!-- CardDeck.vue -->
 <template>
   <div style="display: none;"></div>
 </template>
@@ -30,11 +29,15 @@ export default {
     },
     draw(number) {
       return this.deck.splice(0, number);
+    },
+    prepareDeck() {
+      this.createDeck();
+      this.shuffleDeck();
+      this.$emit('deck-ready', this.deck);
     }
   },
   created() {
-    this.createDeck();
-    this.shuffleDeck();
+    this.prepareDeck();
   }
 }
 </script>

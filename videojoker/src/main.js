@@ -1,7 +1,4 @@
-import Vue from 'vue'
-import Game from './components/VideoPokerGame.vue'
+import { createApp } from 'vue';
+import Game from './components/VideoPokerGame.vue';
 
-new Vue({
-  el: '#app',
-  render: h => h(Game)
-})
+createApp(Game).mount('#app');
