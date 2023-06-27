@@ -1,8 +1,7 @@
 <template>
   <div>
     <button @click="startGame">Start Game</button>
-    <button v-if="gameStarted" @click="drawHand">Draw</button>
-    <card-hand v-if="gameStarted" :hand="hand" @replace="replace"></card-hand>
+    <card-hand v-if="gameStarted" :hand="hand" @drawNewCards="drawNewCards"></card-hand>
     <card-deck ref="cardDeck" @deck-ready="handleDeckReady"></card-deck>
   </div>
 </template>
@@ -33,18 +32,17 @@ export default {
         this.hand.push(this.deck.pop());
       }
     },
-    replace(index) {
-      this.hand.splice(index, 1, this.deck.pop());
-      // Check if game is over and score hand
+    drawNewCards(heldCards) {
+      heldCards.forEach((held, index) => {
+        if (!held) {
+          this.hand.splice(index, 1, this.deck.pop());
+        }
+      });
     },
     handleDeckReady(deck) {
       this.deck = deck;
       this.drawHand();
     },
-  },
-  mounted() {
-    // Commented this line out.
-    // this.$refs.cardDeck.prepareDeck();
   }
 }
 </script>
