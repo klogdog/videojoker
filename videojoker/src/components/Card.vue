@@ -21,7 +21,7 @@
       },
       faceCardImage() {
         if (this.isFaceCard) {
-          return `/path/to/${this.card.value}-face-card.png`;
+          return `/images/${this.card.value}-face-card.png`;
         }
         return '';
       }
