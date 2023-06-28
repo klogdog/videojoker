@@ -1,10 +1,8 @@
-<!-- Game.vue -->
 <template>
   <div>
     <button @click="startGame">Start Game</button>
-    <button v-if="gameStarted" @click="drawHand">Draw</button>
-    <card-hand v-if="gameStarted" :hand="hand" @replace="replace"></card-hand>
-    <card-deck v-show="false" @deck-ready="handleDeckReady"></card-deck>
+    <card-hand :hand="hand" :heldStatus="heldCards" @toggleHold="toggleHold" @drawNewCards="drawNewCards"></card-hand>
+    <card-deck ref="cardDeck"></card-deck>
   </div>
 </template>
 
@@ -20,27 +18,24 @@ export default {
   },
   data() {
     return {
-      gameStarted: false,
-      deck: [],
-      hand: []
+      hand: [],
+      heldCards: Array(5).fill(false),
     }
   },
   methods: {
     startGame() {
-      this.gameStarted = true;
+      this.hand = this.$refs.cardDeck.draw(5);
     },
-    drawHand() {
-      for (let i = 0; i < 5; i++) {
-        this.hand.push(this.deck.pop());
+    toggleHold(index) {
+      this.heldCards[index] = !this.heldCards[index];
+    },
+    drawNewCards() {
+      for (let i = 0; i < this.hand.length; i++) {
+        if (!this.heldCards[i]) {
+          this.hand.splice(i, 1, this.$refs.cardDeck.draw(1)[0]);
+        }
       }
-    },
-    replace(index) {
-      this.hand.splice(index, 1, this.deck.pop());
-      // Check if game is over and score hand
-    },
-    handleDeckReady(deck) {
-      this.deck = deck;
-      this.drawHand();
+      this.heldCards = Array(5).fill(false);
     },
   }
 }

@@ -1,8 +1,9 @@
 <template>
   <div class="hand-container">
     <div v-for="(card, index) in hand" :key="card.value + card.suit" class="card-container">
-      <poker-card :card="card" :held="heldCards[index]" @click="holdOrReplace(index)"></poker-card>
+      <poker-card :card="card" :held="heldStatus[index]" @cardClick="toggleHold(index)"></poker-card>
     </div>
+    <button @click="drawNewCards">Draw</button>
   </div>
 </template>
 
@@ -19,26 +20,17 @@ export default {
       type: Array,
       required: true
     },
-  },
-  data() {
-    return {
-      heldCards: Array(5).fill(false)
-    }
+    heldStatus: {
+      type: Array,
+      required: true
+    },
   },
   methods: {
-    holdOrReplace(index) {
-      this.heldCards[index] = !this.heldCards[index];
+    toggleHold(index) {
+      this.$emit('toggleHold', index);
     },
     drawNewCards() {
-      const newHand = [];
-      for (let i = 0; i < this.hand.length; i++) {
-        if (!this.heldCards[i]) {
-          newHand.push(this.$parent.deck.pop());
-        } else {
-          newHand.push(this.hand[i]);
-        }
-      }
-      this.$emit('replace', newHand);
+      this.$emit('drawNewCards');
     }
   }
 }

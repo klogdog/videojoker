@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     handleCardClick() {
-      this.$emit('click');
+      this.$emit('cardClick');
     }
   }
 }
