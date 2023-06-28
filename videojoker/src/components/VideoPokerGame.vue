@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     startGame() {
+      this.$refs.cardDeck.prepareDeck();
       this.hand = this.$refs.cardDeck.draw(5);
     },
     toggleHold(index) {
@@ -32,7 +33,13 @@ export default {
     drawNewCards() {
       for (let i = 0; i < this.hand.length; i++) {
         if (!this.heldCards[i]) {
-          this.hand.splice(i, 1, this.$refs.cardDeck.draw(1)[0]);
+          let newCard = this.$refs.cardDeck.draw(1);
+          if(newCard.length === 0) {
+            // No more cards in the deck
+            console.log("The deck is empty.");
+            return;
+          }
+          this.hand.splice(i, 1, newCard[0]);
         }
       }
       this.heldCards = Array(5).fill(false);
