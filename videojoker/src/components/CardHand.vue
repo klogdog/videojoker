@@ -3,8 +3,6 @@
     <div v-for="(card, index) in hand" :key="index" class="card-container">
       <poker-card :card="card" :held="heldStatus[index]" @cardClick="toggleHold(index)"></poker-card>
     </div>
-    <button class="control-button" @click="handleButtonClick">{{ buttonText }}</button>
-    <div v-if="isGameOver" class="game-over">Game Over</div>
   </div>
 </template>
 
@@ -25,22 +23,11 @@ export default {
       type: Array,
       required: true
     },
-    isGameOver: {
-      type: Boolean,
-      required: true
-    },
-    buttonText: {
-      type: String,
-      required: true
-    }
   },
   methods: {
     toggleHold(index) {
       this.$emit('toggleHold', index);
     },
-    handleButtonClick() {
-      this.$emit('handleButtonClick');
-    }
   }
 }
 </script>
@@ -58,16 +45,5 @@ export default {
 
 .card-container {
   flex: 1;
-}
-
-.control-button {
-  margin-top: 1rem;
-}
-
-.game-over {
-  text-align: center;
-  color: red;
-  font-size: 2rem;
-  margin-top: 1rem;
 }
 </style>

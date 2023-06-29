@@ -1,14 +1,11 @@
 <template>
   <div class="game-container">
-    <card-hand 
-      :hand="hand" 
-      :heldStatus="heldCards" 
-      :isGameOver="gameOver"
-      :buttonText="buttonText" 
-      @toggleHold="toggleHold"
-      @handleButtonClick="handleButtonClick"
-    ></card-hand>
+    <card-hand :hand="hand" :heldStatus="heldCards" @toggleHold="toggleHold"></card-hand>
+    <button class="control-button" @click="handleButtonClick">{{ buttonText }}</button>
     <card-deck ref="cardDeck"></card-deck>
+    <div v-if="gameOver">
+      <h1>Game Over</h1>
+    </div>
   </div>
 </template>
 
@@ -87,7 +84,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+}
+
+.control-button {
+  margin-top: 20px;
 }
 </style>
