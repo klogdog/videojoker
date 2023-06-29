@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      hand: [],
+      hand: Array(5).fill({ suit: undefined, value: undefined }), // Initializing hand with placeholder cards
       heldCards: Array(5).fill(false),
       gameState: 'start',  // can be 'start', 'draw', 'gameOver'
       gameOver: false
@@ -61,7 +61,7 @@ export default {
       console.log("Scoring hand: ", this.hand);
     },
     restartGame() {
-      this.hand = [];
+      this.hand = Array(5).fill({ suit: undefined, value: undefined }); // Fill the hand with placeholder cards
       this.heldCards = Array(5).fill(false);
       this.gameState = 'start';
       this.gameOver = false;
