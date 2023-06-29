@@ -1,5 +1,8 @@
 <template>
   <div class="game-container">
+    <div class="score-container">
+      Score: {{ totalScore }}
+    </div>
     <card-hand :hand="hand" :heldStatus="heldCards" @toggleHold="toggleHold"></card-hand>
     <button class="control-button" @click="handleButtonClick">{{ buttonText }}</button>
     <card-deck ref="cardDeck"></card-deck>
@@ -26,7 +29,8 @@ export default {
       heldCards: Array(5).fill(false),
       gameState: 'start',  // can be 'start', 'draw', 'gameOver'
       gameOver: false,
-      score: ''
+      score: '',
+      totalScore: 0  // added totalScore to track the running total
     }
   },
   computed: {
@@ -55,6 +59,7 @@ export default {
       }
       this.heldCards = Array(5).fill(false);
       this.score = scoreHand(this.hand);  // use the scoring function from the imported module
+      this.totalScore += this.score;  // update the totalScore
       this.gameOver = true;
       this.gameState = 'gameOver';
     },
@@ -86,6 +91,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.score-container {
+  align-self: flex-end;
+  margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .control-button {
