@@ -1,6 +1,6 @@
 <template>
-  <div class="poker-card" :class="{ held: held }" @click="handleCardClick">
-    <div class="card-content">
+  <div class="poker-card" :class="{ held: held, placeholder: isPlaceholder }" @click="handleCardClick">
+    <div class="card-content" v-if="!isPlaceholder">
       <span class="card-value">{{ card.value }}</span>
       <img v-if="isFaceCard" :src="'./images/' + card.value + '-face-card.png'" alt="Face card image" class="face-card-image">
       <div class="card-suit">{{ card.suit }}</div>
@@ -14,7 +14,7 @@ export default {
   props: {
     card: {
       type: Object,
-      required: true
+      default: () => ({})
     },
     held: {
       type: Boolean,
@@ -22,13 +22,18 @@ export default {
     }
   },
   computed: {
+    isPlaceholder() {
+      return !this.card.value && !this.card.suit;
+    },
     isFaceCard() {
       return ['J', 'Q', 'K', 'A'].includes(this.card.value);
     }
   },
   methods: {
     handleCardClick() {
-      this.$emit('cardClick');
+      if (!this.isPlaceholder) {
+        this.$emit('cardClick');
+      }
     }
   }
 }
@@ -53,6 +58,10 @@ export default {
 .held {
   transform: translateY(-10px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.placeholder {
+  background-color: #ddd;
 }
 
 .card-content {

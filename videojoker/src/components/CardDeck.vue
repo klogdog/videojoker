@@ -1,9 +1,3 @@
-<template>
-  <div>
-    <button @click="prepareDeck">Prepare Deck</button>
-  </div>
-</template>
-
 <script>
 export default {
   name: 'CardDeck',
@@ -38,8 +32,8 @@ export default {
       this.$emit('deck-ready', this.deck);
     }
   },
-  mounted() {
-    // Prepare deck is moved to the button click.
+  created() {
+    this.prepareDeck();
   }
 }
 </script>
