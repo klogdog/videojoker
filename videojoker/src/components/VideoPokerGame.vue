@@ -7,7 +7,7 @@
     <button class="control-button" @click="handleButtonClick">{{ buttonText }}</button>
     <card-deck ref="cardDeck"></card-deck>
     <div v-if="gameOver">
-      <h1>{{ score }}</h1>
+      <h1>{{ message }}</h1> <!-- changed from {{ score }} to {{ message }} -->
     </div>
   </div>
 </template>
@@ -25,12 +25,13 @@ export default {
   },
   data() {
     return {
-      hand: Array(5).fill({ suit: undefined, value: undefined }), // Initializing hand with placeholder cards,
+      hand: Array(5).fill({ suit: undefined, value: undefined }),
       heldCards: Array(5).fill(false),
-      gameState: 'start',  // can be 'start', 'draw', 'gameOver'
+      gameState: 'start',
       gameOver: false,
-      score: '',
-      totalScore: 0  // added totalScore to track the running total
+      score: 0,
+      totalScore: 0,
+      message: ''  // added message to track the hand type
     }
   },
   computed: {
@@ -58,14 +59,15 @@ export default {
         }
       }
       this.heldCards = Array(5).fill(false);
-      this.score = scoreHand(this.hand);  // use the scoring function from the imported module
+      let result = scoreHand(this.hand);  // use the scoring function from the imported module
+      this.score = result.score;  // update the score
+      this.message = result.message;  // update the message
       this.totalScore += this.score;  // update the totalScore
       this.gameOver = true;
       this.gameState = 'gameOver';
     },
     restartGame() {
       this.$refs.cardDeck.prepareDeck();
-      // this.hand = Array(5).fill({ suit: undefined, value: undefined }); // Initializing hand with placeholder cards
       this.heldCards = Array(5).fill(false);
       this.gameState = 'start';
       this.gameOver = false;
@@ -91,10 +93,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .score-container {
-  align-self: flex-end;
+  position: absolute;
+  top: 0;
+  right: 0;
   margin: 10px;
   font-size: 20px;
   font-weight: bold;
