@@ -45,6 +45,7 @@ export default {
       this.gameState = 'draw';
     },
     toggleHold(index) {
+      if (this.gameState === 'gameOver') return;
       this.heldCards[index] = !this.heldCards[index];
     },
     drawNewCards() {
