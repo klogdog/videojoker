@@ -1,9 +1,10 @@
 <template>
   <div class="poker-card" :class="{ held: held, placeholder: isPlaceholder }" @click="handleCardClick">
     <div class="card-content" v-if="!isPlaceholder">
-      <span class="card-value">{{ card.value }}</span>
+      <span class="card-value" :class="{ 'red': isRed, 'black': !isRed }">{{ card.value }}</span>
+      <div class="card-suit-top-left" :class="{ 'red': isRed, 'black': !isRed }">{{ suitSymbol }}</div>
       <img v-if="isFaceCard" :src="'./images/' + card.value + '-face-card.png'" alt="Face card image" class="face-card-image">
-      <div class="card-suit">{{ card.suit }}</div>
+      <div class="card-suit-center" :class="{ 'red': isRed, 'black': !isRed }">{{ suitSymbol }}</div>
     </div>
   </div>
 </template>
@@ -27,6 +28,23 @@ export default {
     },
     isFaceCard() {
       return ['J', 'Q', 'K', 'A'].includes(this.card.value);
+    },
+    isRed() {
+      return this.card.suit === 'hearts' || this.card.suit === 'diamonds';
+    },
+    suitSymbol() {
+      switch (this.card.suit) {
+        case 'clubs':
+          return '♣';
+        case 'diamonds':
+          return '♦';
+        case 'hearts':
+          return '♥';
+        case 'spades':
+          return '♠';
+        default:
+          return '';
+      }
     }
   },
   methods: {
@@ -77,6 +95,24 @@ export default {
   position: absolute;
   top: 5px;
   left: 5px;
+}
+
+.card-suit-top-left {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.card-suit-center {
+  font-size: 2em;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
 }
 
 .face-card-image {
