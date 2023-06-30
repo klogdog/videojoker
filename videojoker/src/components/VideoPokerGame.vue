@@ -7,7 +7,7 @@
     <button class="control-button" @click="handleButtonClick">{{ buttonText }}</button>
     <card-deck ref="cardDeck"></card-deck>
     <div v-if="gameOver">
-      <h1>{{ message }}</h1> <!-- changed from {{ score }} to {{ message }} -->
+      <h1>{{ message }}</h1>
     </div>
   </div>
 </template>
@@ -31,7 +31,8 @@ export default {
       gameOver: false,
       score: 0,
       totalScore: 0,
-      message: ''  // added message to track the hand type
+      message: '',
+      isKeydownFired: false
     }
   },
   computed: {
@@ -45,7 +46,6 @@ export default {
       this.gameState = 'draw';
     },
     toggleHold(index) {
-      if (this.gameState === 'gameOver') return;
       this.heldCards[index] = !this.heldCards[index];
     },
     drawNewCards() {
@@ -60,10 +60,10 @@ export default {
         }
       }
       this.heldCards = Array(5).fill(false);
-      let result = scoreHand(this.hand);  // use the scoring function from the imported module
-      this.score = result.score;  // update the score
-      this.message = result.message;  // update the message
-      this.totalScore += this.score;  // update the totalScore
+      let result = scoreHand(this.hand);
+      this.score = result.score;
+      this.message = result.message;
+      this.totalScore += this.score;
       this.gameOver = true;
       this.gameState = 'gameOver';
     },
@@ -81,10 +81,34 @@ export default {
       } else if(this.gameState === 'gameOver') {
         this.restartGame();
       }
-    }
+    },
+    handleKeydown(event) {
+      if (event.repeat || this.isKeydownFired) return;
+      
+      const keyMappings = {
+        'a': 0,
+        's': 1,
+        'd': 2,
+        'f': 3,
+        'g': 4,
+      };
+
+      if (Object.prototype.hasOwnProperty.call(keyMappings, event.key) && this.gameState !== 'gameOver') {
+        this.toggleHold(keyMappings[event.key]);
+      } else if (event.key === ' ') {
+        this.handleButtonClick();
+      }
+      
+      this.isKeydownFired = true;
+      setTimeout(() => this.isKeydownFired = false, 100);
+    },
   },
   mounted() {
     this.restartGame();
+    window.addEventListener('keydown', this.handleKeydown);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.handleKeydown);
   }
 }
 </script>
